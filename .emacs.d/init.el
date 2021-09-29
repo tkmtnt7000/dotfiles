@@ -102,6 +102,12 @@
   (add-to-list 'auto-mode-alist '("¥¥.yml$" . yaml-mode)))
 ;;;================================================
 
+;;; euslime
+(add-to-list 'load-path "/opt/ros/melodic/share/euslime")
+(require 'euslime-config)
+(setq inferior-euslisp-program "roseus")
+(slime-setup '(slime-fancy slime-banner slime-repl-ansi-color))
+
 ;; ;; add color space,tab,zenkaku-space
 ;; (unless (and (boundp '*do-not-show-space*) *do-not-show-space*)
 ;;   (defface my-face-b-1 '((t (:background "gray"))) nil)
