@@ -5,6 +5,12 @@
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
+
+;; MELPA
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+
 (package-initialize)
 
 (global-set-key "\C-h" 'backward-delete-char)
@@ -73,10 +79,10 @@
         ;; If this is a problem for you, please, comment the line below.
         (tab-mark ?\t [?\u00BB ?\t] [?\\ ?\t])))
 
-;;スペースは全角のみを可視化
+;; スペースは全角のみを可視化
 (setq whitespace-space-regexp "\\(\u3000+\\)")
-
-(global-whitespace-mode 1)
+;; 行末
+(setq whitespace-trailing-regexp  "\\([ \u00A0]+\\)$")
 
 (defvar my/bg-color "#232323")
 (set-face-attribute 'whitespace-trailing nil
@@ -88,11 +94,16 @@
                     :foreground "LightSkyBlue"
                     :underline t)
 (set-face-attribute 'whitespace-space nil
-                    :background my/bg-color
-                    :foreground "GreenYellow"
-                    :weight 'bold)
-(set-face-attribute 'whitespace-empty nil
-                    :background my/bg-color)
+                    :foreground "gray40"
+                    :background "gray20"
+                    :underline nil)
+;; (set-face-attribute 'whitespace-space nil
+;;                     :background my/bg-color
+;;                     :foreground "GreenYellow"
+;;                     :weight 'bold)
+;; (set-face-attribute 'whitespace-empty nil
+;;                     :background my/bg-color)
+(global-whitespace-mode 1)
 
 ;;;================================================
 
@@ -107,6 +118,15 @@
 (require 'euslime-config)
 (setq inferior-euslisp-program "roseus")
 (slime-setup '(slime-fancy slime-banner slime-repl-ansi-color))
+
+;;; company-mode
+(require 'company)
+
+
+
+
+
+
 
 ;; ;; add color space,tab,zenkaku-space
 ;; (unless (and (boundp '*do-not-show-space*) *do-not-show-space*)
@@ -161,3 +181,18 @@
 ;;; trr
 ;;; M-x trr
 ;;;=================================================
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (magit json-mode company undo-tree gnu-elpa-keyring-update)))
+ '(safe-local-variable-values (quote ((encoding . utf-8)))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
