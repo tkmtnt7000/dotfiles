@@ -121,12 +121,11 @@
 
 ;;; company-mode
 (require 'company)
-
-
-
-
-
-
+(global-company-mode +1)
+(custom-set-variables
+ '(company-idle-delay 0)  ;; default 0.5
+ '(company-minimum-prefix-length 2) ;; default 4
+ '(company-selection-wrap-around t)) ;; loop
 
 ;; ;; add color space,tab,zenkaku-space
 ;; (unless (and (boundp '*do-not-show-space*) *do-not-show-space*)
@@ -188,7 +187,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (magit json-mode company undo-tree gnu-elpa-keyring-update)))
+    (flycheck magit json-mode company undo-tree gnu-elpa-keyring-update)))
  '(safe-local-variable-values (quote ((encoding . utf-8)))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -196,3 +195,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;;; flycheck
+(global-flycheck-mode +1)
+;;; undo-tree
+(global-undo-tree-mode +1)
