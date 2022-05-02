@@ -10,8 +10,39 @@
 (require 'package)
 (add-to-list 'package-archives
              '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives
+             '("org" . "https://orgmode.org/elpa/") t)
+
 
 (package-initialize)
+
+
+(defun require-package (package &optional min-version no-refresh)
+  "Install given PACKAGE, optionally requiring MIN-VERSION.
+If NO-REFRESH is non-nil, the available package lists will not be
+re-downloaded in order to locate PACKAGE."
+  (if (package-installed-p package min-version)
+      t
+    (if (or (assoc package package-archive-contents) no-refresh)
+        (if (boundp 'package-selected-packages)
+            ;; Record this as a package the user installed explicitly
+            (package-install package nil)
+          (package-install package))
+      (progn
+        (package-refresh-contents)
+        (require-package package min-version t)))))
+
+(defun maybe-require-package (package &optional min-version no-refresh)
+  "Try to install PACKAGE, and return non-nil if successful.
+In the event of failure, return nil and print a warning message.
+Optionally require MIN-VERSION.  If NO-REFRESH is non-nil, the
+available package lists will not be re-downloaded in order to
+locate PACKAGE."
+  (condition-case err
+      (require-package package min-version no-refresh)
+    (error
+     (message "Couldn't install optional package `%s': %S" package err)
+     nil)))
 
 (global-set-key "\C-h" 'backward-delete-char)
 (global-set-key "\M-g" 'goto-line)
@@ -53,10 +84,10 @@
 ;;; 1行ごとに改ページ
 (setq scroll-conservatively 1)
 
-;;; trr
-(add-to-list 'load-path "/home/tsukamoto/.emacs.d/emacs-trr/")
-(setq trr-japanese t) ;; uncomment this to play with Japanese mode
-(require 'trr)
+;; ;;; trr
+;; (add-to-list 'load-path "/home/tsukamoto/.emacs.d/emacs-trr/")
+;; (setq trr-japanese t) ;; uncomment this to play with Japanese mode
+;; (require 'trr)
 
 ;;;==================================
 ;;; スペース・タブの可視化
@@ -103,14 +134,15 @@
 ;;                     :weight 'bold)
 ;; (set-face-attribute 'whitespace-empty nil
 ;;                     :background my/bg-color)
-(global-whitespace-mode 1)
+(global-whitespace-mode t)
 
 ;;;================================================
 
 ;;;================================================
 ;;; yaml-modeの自動適用
 (when (require 'yaml-mode nil t)
-  (add-to-list 'auto-mode-alist '("¥¥.yml$" . yaml-mode)))
+  (add-to-list 'auto-mode-alist '("¥¥.yml$" . yaml-mode))
+  (add-to-list 'auto-mode-alist '("¥¥.yaml$" . yaml-mode)))
 ;;;================================================
 
 ;;; euslime
@@ -121,11 +153,21 @@
 
 ;;; company-mode
 (require 'company)
+(require-package 'company)
 (global-company-mode +1)
 (custom-set-variables
- '(company-idle-delay 0)  ;; default 0.5
- '(company-minimum-prefix-length 2) ;; default 4
- '(company-selection-wrap-around t)) ;; loop
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-idle-delay 0)
+ '(company-minimum-prefix-length 2)
+ '(company-selection-wrap-around t)
+ '(package-selected-packages
+   (quote
+    (undo-tree dockerfile-mode flycheck magit json-mode company gnu-elpa-keyring-update)))
+ '(safe-local-variable-values (quote ((encoding . utf-8)))))
+ ;; loop
 
 ;; ;; add color space,tab,zenkaku-space
 ;; (unless (and (boundp '*do-not-show-space*) *do-not-show-space*)
@@ -180,15 +222,7 @@
 ;;; trr
 ;;; M-x trr
 ;;;=================================================
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (flycheck magit json-mode company undo-tree gnu-elpa-keyring-update)))
- '(safe-local-variable-values (quote ((encoding . utf-8)))))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -197,6 +231,10 @@
  )
 
 ;;; flycheck
-(global-flycheck-mode +1)
+(require-package 'flycheck)
+(global-flycheck-mode t)
 ;;; undo-tree
+(require-package 'undo-tree)
 (global-undo-tree-mode +1)
+;;; not divide when launching emacs
+(setq infibit-startup-message t)
