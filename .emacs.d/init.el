@@ -146,7 +146,8 @@ locate PACKAGE."
 ;;;================================================
 
 ;;; euslime
-(add-to-list 'load-path "/opt/ros/melodic/share/euslime")
+(add-to-list 'load-path
+             (format "/opt/ros/%s/share/euslime" (or rosdistro "melodic")))
 (require 'euslime-config)
 (setq inferior-euslisp-program "roseus")
 (slime-setup '(slime-fancy slime-banner slime-repl-ansi-color))
