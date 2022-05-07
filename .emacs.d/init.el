@@ -238,3 +238,52 @@ locate PACKAGE."
 (global-undo-tree-mode +1)
 ;;; not divide when launching emacs
 (setq infibit-startup-message t)
+
+;; lsp-mode
+(require 'flycheck)
+(use-package lsp-mode
+  :commands lsp
+  :config
+  (setq gc-cons-threshold 100000000)
+  (setq read-process-output-max (* 1024 1024))
+  (setq lsp-completion-provider :capf)
+  (setq lsp-idle-delay 0.500)
+  (setq lsp-log-io nil) ; if set to true can cause a performance hit
+  (setq lsp-diagnostic-provider :flycheck) ; use flycheck instead of flymake to improve the performance
+  (setq lsp-signature-auto-activate t)
+  (setq lsp-signature-doc-lines 1) ; restrict lines of lsp-signature doc showed at the bottom
+  (setq lsp-prefer-flymake nil)
+  )
+;; (require 'lsp-mode)
+;; (setq gc-cons-threshold 100000000)
+;; (setq read-process-output-max (* 1024 1024))
+;; (setq lsp-completion-provider :capf)
+;; (setq lsp-idle-delay 0.500)
+(require 'lsp-ui)
+;; (setq lsp-ui-imenu-enable t)
+;; (setq lsp-ui-imenu-window-width 40)
+(setq lsp-headerline-breadcrumb-enable t)
+(setq lsp-ui-doc-enable t)
+(setq lsp-ui-doc-frame-mode nil)
+(setq lsp-ui-doc-background 'dark)
+(setq lsp-ui-doc-show-with-cursor t)
+;;(setq lsp-ui-doc-show-with-mouse t)
+(setq lsp-ui-peek-enable t)
+(custom-set-faces
+   '(lsp-ui-doc-background ((t :background "#ff00ff")))
+   '(lsp-ui-doc-header ((t :foreground "#ff8000" :background "#00ff00")))
+   '(lsp-ui-doc-url ((t :inherit link))))
+
+;; lsp-pyright
+;; (require 'lsp-pyright)
+;; (add-hook 'python-mode-hook #'lsp)
+(use-package lsp-pyright
+  :ensure t
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-pyright)
+                          (lsp))))  ; or lsp-deferred
+;;(require 'lsp-pyright)
+;; (add-hook 'python-mode-hook #'lsp)
+
+(setq lsp-pyright-use-library-code-for-types t) ;; set this to nil if getting too many false positive type errors
+(setq lsp-pyright-stub-path (concat (getenv "HOME") "/src/python-type-stubs")) ;; example
