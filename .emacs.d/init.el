@@ -153,8 +153,8 @@ locate PACKAGE."
 (slime-setup '(slime-fancy slime-banner slime-repl-ansi-color))
 
 ;;; company-mode
-(require 'company)
 (require-package 'company)
+(require 'company)
 (global-company-mode +1)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -166,7 +166,7 @@ locate PACKAGE."
  '(company-selection-wrap-around t)
  '(package-selected-packages
    (quote
-    (undo-tree dockerfile-mode flycheck magit json-mode company gnu-elpa-keyring-update)))
+    (lsp-pyright lsp-ui undo-tree dockerfile-mode flycheck magit json-mode company gnu-elpa-keyring-update)))
  '(safe-local-variable-values (quote ((encoding . utf-8)))))
  ;; loop
 
@@ -229,7 +229,9 @@ locate PACKAGE."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(lsp-ui-doc-background ((t :background "#ff00ff")))
+ '(lsp-ui-doc-header ((t :foreground "#ff8000" :background "#00ff00")))
+ '(lsp-ui-doc-url ((t :inherit link))))
 
 ;;; flycheck
 (require-package 'flycheck)
@@ -240,6 +242,7 @@ locate PACKAGE."
 ;;; not divide when launching emacs
 (setq infibit-startup-message t)
 
+(require-package 'use-package)
 ;; lsp-mode
 (require 'flycheck)
 (use-package lsp-mode
@@ -260,6 +263,7 @@ locate PACKAGE."
 ;; (setq read-process-output-max (* 1024 1024))
 ;; (setq lsp-completion-provider :capf)
 ;; (setq lsp-idle-delay 0.500)
+(require-package 'lsp-ui)
 (require 'lsp-ui)
 ;; (setq lsp-ui-imenu-enable t)
 ;; (setq lsp-ui-imenu-window-width 40)
@@ -270,10 +274,7 @@ locate PACKAGE."
 (setq lsp-ui-doc-show-with-cursor t)
 ;;(setq lsp-ui-doc-show-with-mouse t)
 (setq lsp-ui-peek-enable t)
-(custom-set-faces
-   '(lsp-ui-doc-background ((t :background "#ff00ff")))
-   '(lsp-ui-doc-header ((t :foreground "#ff8000" :background "#00ff00")))
-   '(lsp-ui-doc-url ((t :inherit link))))
+
 
 ;; lsp-pyright
 ;; (require 'lsp-pyright)
