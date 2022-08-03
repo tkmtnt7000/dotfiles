@@ -11,6 +11,8 @@
 (add-to-list 'package-archives
              '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives
              '("org" . "https://orgmode.org/elpa/") t)
 
 
@@ -137,6 +139,22 @@ locate PACKAGE."
 (global-whitespace-mode t)
 
 ;;;================================================
+;; カーソル行のハイライト
+(defface hlline-face
+  '((((class color)
+      (background dark))
+     (:background "gray20"))
+    (((class color)
+      (background light))
+     (:background "gray20"))
+    (t
+     ()))
+  "*Face used by hl-line.")
+(setq hl-line-face 'hlline-face)
+;;(setq hl-line-face 'underline) ; 下線
+(global-hl-line-mode)
+
+;;;================================================
 
 ;;;================================================
 ;;; yaml-modeの自動適用
@@ -166,7 +184,7 @@ locate PACKAGE."
  '(company-selection-wrap-around t)
  '(package-selected-packages
    (quote
-    (lsp-pyright lsp-ui undo-tree dockerfile-mode flycheck magit json-mode company gnu-elpa-keyring-update)))
+    (open-junk-file lsp-pyright lsp-ui undo-tree dockerfile-mode flycheck magit json-mode company gnu-elpa-keyring-update)))
  '(safe-local-variable-values (quote ((encoding . utf-8)))))
  ;; loop
 
@@ -289,3 +307,7 @@ locate PACKAGE."
 
 (setq lsp-pyright-use-library-code-for-types t) ;; set this to nil if getting too many false positive type errors
 (setq lsp-pyright-stub-path (concat (getenv "HOME") "/src/python-type-stubs")) ;; example
+
+(package-install 'open-junk-file)
+(setq open-junk-file-format "~/program/junk/%Y/%m/%Y-%m-%d-%H%M%S.")
+(global-set-key (kbd "C-x j") 'open-junk-file)
